@@ -1,4 +1,4 @@
-package ru.job4j.concurrent;
+package ru.job4j.concurrent.synch;
 
 public final class DCLSingleton {
 
