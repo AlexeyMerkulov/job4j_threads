@@ -3,7 +3,7 @@ package ru.job4j.concurrent.blockcache;
 import java.util.Objects;
 
 public class User {
-    private int id;
+    private final int id;
     private int amount;
 
     public User(int id, int amount) {
