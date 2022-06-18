@@ -18,13 +18,9 @@ public class SimpleBlockingQueue<T> {
         this.capacity = capacity;
     }
 
-    public synchronized void offer(T value) {
+    public synchronized void offer(T value) throws InterruptedException {
         while (queue.size() == capacity) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+            wait();
         }
         queue.offer(value);
         System.out.println("Добавлено значение " + value);
@@ -49,7 +45,11 @@ public class SimpleBlockingQueue<T> {
         SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(5);
         Thread producer = new Thread(() -> {
             for (int i = 0; i < 8; i++) {
-                queue.offer(i);
+                try {
+                    queue.offer(i);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
         Thread consumer = new Thread(() -> {
