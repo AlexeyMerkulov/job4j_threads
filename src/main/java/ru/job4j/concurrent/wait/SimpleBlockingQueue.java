@@ -27,39 +27,13 @@ public class SimpleBlockingQueue<T> {
         notify();
     }
 
-    public synchronized T poll() {
+    public synchronized T poll() throws InterruptedException {
         while (queue.size() == 0) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+            wait();
         }
         T value = queue.poll();
         System.out.println("Удалено значение " + value);
         notify();
         return value;
-    }
-
-    public static void main(String[] args) throws InterruptedException {
-        SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(5);
-        Thread producer = new Thread(() -> {
-            for (int i = 0; i < 8; i++) {
-                try {
-                    queue.offer(i);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        Thread consumer = new Thread(() -> {
-            for (int i = 0; i < 8; i++) {
-                queue.poll();
-            }
-        });
-        producer.start();
-        consumer.start();
-        producer.join();
-        consumer.join();
     }
 }
