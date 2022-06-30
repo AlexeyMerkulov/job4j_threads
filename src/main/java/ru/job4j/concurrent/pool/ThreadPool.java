@@ -36,4 +36,15 @@ public class ThreadPool {
             thread.interrupt();
         }
     }
+
+    public static void main(String[] args) throws InterruptedException {
+        ThreadPool pool = new ThreadPool(10);
+        for (int i = 1; i <= 10; i++) {
+            int j = i;
+            Runnable work = () -> System.out.printf("Work %d is done" + System.lineSeparator(), j);
+            pool.work(work);
+        }
+        Thread.sleep(1000);
+        pool.shutdown();
+    }
 }
