@@ -13,7 +13,9 @@ public class AsyncExamples {
             count++;
         }
     }
-    //runAsync запускает асинхронно задачу и ничего не возвращает
+
+    /**runAsync запускает асинхронно задачу и ничего не возвращает
+     */
     public static CompletableFuture<Void> goToTrash() {
         return CompletableFuture.runAsync(
                 () -> {
@@ -27,7 +29,9 @@ public class AsyncExamples {
                 }
         );
     }
-    //supplyAsync запускает асинхрнно задачу и возвращает значение
+
+    /**supplyAsync запускает асинхрнно задачу и возвращает значение
+     */
     public static CompletableFuture<String> buyProduct(String product) {
         return CompletableFuture.supplyAsync(
                 () -> {
@@ -42,18 +46,20 @@ public class AsyncExamples {
                 }
         );
     }
-    //Запустить в main
+
     public static void runAsyncExample() throws Exception {
         CompletableFuture<Void> gtt = goToTrash();
         iWork();
     }
-    //Запустить в main
+
     public static void supplyAsyncExample() throws Exception {
         CompletableFuture<String> bm = buyProduct("Молоко");
         iWork();
         System.out.println("Куплено: " + bm.get());
     }
-    //Работа thenRun - выполнение задачи после завершения gtt
+
+    /**Работа thenRun - выполнение задачи после завершения gtt
+     */
     public static void thenRunExample() throws Exception {
         CompletableFuture<Void> gtt = goToTrash();
         gtt.thenRun(() -> {
@@ -71,29 +77,35 @@ public class AsyncExamples {
         });
         iWork();
     }
-    //thenAccept имеет доступ к результату CompletableFuture
+
+    /**thenAccept имеет доступ к результату CompletableFuture
+     * */
     public static void thenAcceptExample() throws Exception {
         CompletableFuture<String> bm = buyProduct("Молоко");
         bm.thenAccept((product) -> System.out.println("Сын: Я убрал " + product + " в холодильник "));
         iWork();
         System.out.println("Куплено: " + bm.get());
     }
-    //thenApply преобразовывает рез-т CompletableFuture, рез-т преобразования станет доступным при вызове get()
+
+    /**thenApply преобразовывает рез-т CompletableFuture, рез-т преобразования станет доступным при вызове get()
+     * */
     public static void thenApplyExample() throws Exception {
         CompletableFuture<String> bm = buyProduct("Молоко")
                 .thenApply((product) -> "Сын: я налил тебе в кружку " + product + ". Держи.");
         iWork();
         System.out.println(bm.get());
     }
-    //для совмещения двух объектов CompletableFuture можно использовать thenCompose(), thenCombine()
-    //thenCompose() используется, если действия зависимы, т.е. сначала выполнится одно а только потом другое
+    /**для совмещения двух объектов CompletableFuture можно использовать thenCompose(), thenCombine()
+    thenCompose() используется, если действия зависимы, т.е. сначала выполнится одно а только потом другое
+     */
     public static void thenComposeExample() throws Exception {
         CompletableFuture<String> result = goToTrash().thenCompose(a -> buyProduct("Milk"));
         result.get();
     }
-    //thenCombine() используется, если действия могут быть выполнены независимо друг от друга.
-    // Причем в качестве второго аргумента, нужно передавать BiFunction – функцию,
-    // которая преобразует результаты двух задач во что-то одно
+    /**thenCombine() используется, если действия могут быть выполнены независимо друг от друга.
+     Причем в качестве второго аргумента, нужно передавать BiFunction – функцию,
+     которая преобразует результаты двух задач во что-то одно
+     */
     public static void thenCombineExample() throws Exception {
         CompletableFuture<String> result = buyProduct("Молоко")
                 .thenCombine(buyProduct("Хлеб"), (r1, r2) -> "Куплены " + r1 + " и " + r2);
@@ -111,7 +123,9 @@ public class AsyncExamples {
             System.out.println(name + ", моет руки");
         });
     }
-    //allOf() возвращает ComputableFuture<Void>, при этом обеспечивает выполнение всех задач
+
+    /**allOf() возвращает ComputableFuture<Void>, при этом обеспечивает выполнение всех задач
+     * */
     public static void allOfExample() throws Exception {
         CompletableFuture<Void> all = CompletableFuture.allOf(
                 washHands("Папа"), washHands("Мама"),
@@ -130,7 +144,9 @@ public class AsyncExamples {
             return name + ", моет руки";
         });
     }
-    //anyOf()  возвращает ComputableFuture<Object>. Результатом будет первая выполненная задача
+
+    /**anyOf()  возвращает ComputableFuture<Object>. Результатом будет первая выполненная задача
+     */
     public static void anyOfExample() throws Exception {
         CompletableFuture<Object> first = CompletableFuture.anyOf(
                 whoWashHands("Папа"), whoWashHands("Мама"),
